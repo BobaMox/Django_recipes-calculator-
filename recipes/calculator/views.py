@@ -29,14 +29,13 @@ DATA = {
 #   }
 # }
 
-
-for k,v in DATA.items():
-    recipe = k
-    for i, j in v.items():
-        ingredient = i
-        amount = j
-        # print(ingredient, amount)
 def dish(request):
+    for k, v in DATA.items():
+        recipe = k
+        for i, j in v.items():
+            ingredient = i
+            amount = j
+
     context = {
         'recipe': recipe,
         'ingredient': ingredient,

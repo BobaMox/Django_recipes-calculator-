@@ -29,16 +29,39 @@ DATA = {
 #   }
 # }
 
-def dish(request):
-    for k, v in DATA.items():
-        recipe = k
-        for i, j in v.items():
-            ingredient = i
-            amount = j
+# def dish(request):
+#     for k, v in DATA.items():
+#         recipe = k
+#         for i, j in v.items():
+#             ingredient = i
+#             amount = j
+#
+#     context = {
+#         'recipe': recipe,
+#         'ingredient': ingredient,
+#         'amount': amount
+#     }
+#     return render(request, 'calculator/index.html', context)
 
+def dish_view(request, dish_name):
+    # Получаем рецепт из словаря по имени блюда
+    recipe = DATA.get(dish_name)
+
+    # Если рецепт не найден, возвращаем ошибку
+    if recipe is None:
+        return render(request, 'calculator/error.html', {'message': 'Такого блюда нет в меню.'})
+
+    # Получаем параметр порций из запроса, по умолчанию 1
+    servings = int(request.GET.get('servings', 1))
+
+    # Умножаем количество ингредиентов на количество порций
+    scaled_recipe = {ingredient: amount * servings for ingredient, amount in recipe.items()}
+
+    # Передаем данные в шаблон
     context = {
-        'recipe': recipe,
-        'ingredient': ingredient,
-        'amount': amount
+        'recipe': scaled_recipe,
+        'dish_name': dish_name,
+        'servings': servings,
     }
+
     return render(request, 'calculator/index.html', context)
